@@ -5,3 +5,13 @@ li {
   display: flex;
   flex-direction: row;
 }
+
+.checked-task,
+.not-checked-task {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.checked-task {
+  text-decoration: line-through;
+}
