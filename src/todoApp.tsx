@@ -1,11 +1,32 @@
+import { FormEvent, useState } from "react"
+import TasksList from "./TasksList"
+import useTaskListState from "./useTaskListState";
 
-function App() {
+function TodoApp() {
 
-  return (
-    <>
+  const [newTask, setValue] = useState<string>('');
 
-    </>
-  )
+    const {tasks, addTask, deleteTask} = useTaskListState([]);
+    
+    function handelSubmit(event: FormEvent<HTMLFormElement>){
+        event.preventDefault();
+     
+        if(newTask.trim().length > 0) 
+            addTask(newTask);
+        setValue('');
+    }
+
+    return (
+        <>     
+            <form onSubmit={handelSubmit}>
+                <div>
+                    <input value={newTask} onChange= {(e) => {setValue(e.target.value)}}>
+                    </input>
+                </div>   
+            </form>
+            <TasksList tasks={tasks} deleteTask={deleteTask} />
+        </>
+    )
 }
 
-export default App
+export default TodoApp
