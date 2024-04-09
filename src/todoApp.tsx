@@ -1,41 +1,30 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Task } from "./Task";
 
 function TodoApp() {
-    
-    useEffect(() => {
-        console.log('On first render')
-        //const storageTasks = JSON.parse(localStorage.getItem("Tasks") || '""');
-        //if (storageTasks !== "") 
-        //    setTasks(storageTasks);
-        return () => {
-            console.log('On unmount');
-            console.log(refTasks); 
-            localStorage.setItem("Tasks", JSON.stringify(refTasks.current));
-        }
-            
-    }, [])
-
-    const storageTasks = JSON.parse(localStorage.getItem("Tasks") || '""');
 
     const [text, setText] = useState<string>('');
-    const [tasks, setTasks] = useState<Task[]>(storageTasks);
-
-    const refTasks = useRef(tasks);
+    const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
         console.log('On tasks changed');
-        refTasks.current = tasks;
         //console.log(refTasks.current);
-        //localStorage.setItem("Tasks", JSON.stringify(tasks));
+        localStorage.setItem("Tasks", JSON.stringify(tasks));
     },[tasks])
+
+    useEffect(() => {
+        console.log('On first render')
+        const storageTasks = JSON.parse(localStorage.getItem("Tasks") || '""');
+        if (storageTasks !== "") 
+            setTasks(storageTasks);       
+    }, [])
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         if(text.trim().length > 0)
             setTasks([...tasks, new Task(text, false)]);
-            setText('');
+        setText('');
     }
 
     function deleteTask(tasksIndex: number) {
